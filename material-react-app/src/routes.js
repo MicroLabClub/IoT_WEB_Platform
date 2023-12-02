@@ -58,7 +58,8 @@ import ResetPassword from "auth/reset-password";
 import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
 import CreateMap from "layouts/maps/CreateMap";
-import ExampleProject1 from "layouts/exampleProject1"
+import ExampleProject1 from "layouts/exampleProject1";
+import ProjectSoilHumidity from "layouts/projectSoilHumidity";
 
 const routes = [
   {
@@ -157,7 +158,14 @@ const routes = [
     route: "/ExampleProject1",
     component: <ExampleProject1 />,
   },
-
+  {
+    type: "collapse",
+    name: "ProjectSoilHumidity",
+    key: "ProjectSoilHumidity",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/ProjectSoilHumidity",
+    component: <ProjectSoilHumidity />,
+  }
   // {
   //   type: "examples",
   //   name: "User Management",
