@@ -15,21 +15,30 @@ import MDButton from "components/MDButton";
 
 const projectSoilHumidity = () => {
   const [messages, setMessages] = useState({});
+  const [count, setCount] = useState(4);
 
 
   console.log(messages);
 
   async function getMessages() {
     try {
-      const response = await axios.get('http://localhost:3001/api/messages/');
-      console.log(response);
+      const requestBodySoilHumidity = {
+        "topic": "microlab/agro/soil/humidity"
+      };
+      const response =
+          await axios.post('http://localhost:3001/api/messages/getByTopic', requestBodySoilHumidity);
+
+      let result = response.data;
+      console.log(result.length);
+
+      let shortResult = result.splice(result.length - 50, result.length);
 
       setMessages({
-        labels: response.data.map(x=> x.message_id),
-        datasets: { label: "Temperature", data: response.data.map(x=> JSON.parse(x.message).temp) },
+        labels: shortResult.map(x=> x.message_id),
+        datasets: { label: "Soil humidity", data: shortResult.map(x=> JSON.parse(x.message).humidity) },
       });
-
-      console.log(messages);
+      const resp = shortResult.map(x=> JSON.parse(x.message).humidity);
+      setCount(resp[49] + "%");
     } catch (error) {
       console.error(error);
     }
@@ -37,6 +46,12 @@ const projectSoilHumidity = () => {
 
   useEffect(() => {
     getMessages();
+    //automatically update the chart data each 5 seconds
+    const intervalId = setInterval(() => {
+      getMessages();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   },[]);
 
   return (
@@ -48,8 +63,8 @@ const projectSoilHumidity = () => {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="waterdropicon"
-                title="Humidity"
-                count="55%"
+                title="Soil Humidity"
+                count={count}
                 percentage={{
                   color: "error",
                   amount: "-1",

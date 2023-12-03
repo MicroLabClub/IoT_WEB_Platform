@@ -91,17 +91,18 @@ function mqtt_subscribe(err, Topic) {
 
 
 // subscribe and publish to the same topic
-client.subscribe('agrobot/sensors/#', mqtt_subscribe);
+// client.subscribe('agrobot/sensors/#', mqtt_subscribe);
+client.subscribe('microlab/agro/soil/humidity', mqtt_subscribe);
 
 setInterval(function () {
   let tc = Math.floor((Math.random() * 100) + 1);
-  client.publish('agrobot/sensors/temperature/sensor-1', JSON.stringify({'temp': tc, 'sensor_id':1}));
+  client.publish('microlab/agro/soil/humidity', JSON.stringify({'humidity': tc, 'sensor_id':1}));
 }, 6000);
 
-setInterval(function () {
-  let tc = Math.floor((Math.random() * 10) + 1);
-  client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':2}));
-}, 6000);
+// setInterval(function () {
+//   let tc = Math.floor((Math.random() * 10) + 1);
+//   client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':2}));
+// }, 6000);
 
 
 //testing

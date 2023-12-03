@@ -41,7 +41,7 @@ const exampleProject1 = () => {
       let shortResult = result.splice(result.length - 50, result.length);
 
       setMessages({
-        labels: shortResult.map(x => x.message_id),
+        labels: shortResult.map(x => x.message_id), // ce scrie dedesubt data sau ora de exemplu
         datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.message).temp) },
       });
 
@@ -50,7 +50,7 @@ const exampleProject1 = () => {
       console.error(error);
     }
   }
-
+  // bind la evenimente la componente
   useEffect(() => {
     getMessages();
   }, []);
