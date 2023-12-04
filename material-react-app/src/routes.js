@@ -58,6 +58,8 @@ import ResetPassword from "auth/reset-password";
 import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
 import ExampleProject1 from "layouts/exampleProject1";
+import FANCoil from "layouts/fancoil";
+import WindPowerIcon from '@mui/icons-material/WindPower';
 
 const routes = [
   {
@@ -155,6 +157,15 @@ const routes = [
     icon: <Icon fontSize="small">settings</Icon>,
     route: "/ExampleProject1",
     component: <ExampleProject1 />,
+  },
+
+  {
+    type: "collapse",
+    name: "FANCoil",
+    key: "FANCoil",
+    icon: <WindPowerIcon/>,
+    route: "/FANCoil",
+    component: <FANCoil />,
   },
 
   // {

@@ -26,4 +26,8 @@ export default {
     labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: { label: "Desktop apps", data: [50, 40, 300, 220, 500, 250, 400, 230, 500] },
   },
+  tasks1: {
+    labels: ["Winter", "Spring", "Summer", "Autumn"],
+    datasets: { label: "Seasons", data: [-0, 5, 30, 10] },
+  },
 };
