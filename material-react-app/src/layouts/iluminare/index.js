@@ -15,17 +15,15 @@ import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import MDButton from "components/MDButton";
 
 import Temp from "./temp";
-import Battery from "./battery";
-import Dial from "./dial";
-import AccelDial from "./accelDial";
 
 import mqtt from "mqtt";
 import { options } from "../../config/mqtt.config";
 import { host } from "../../config/mqtt.config";
 import MDTypography from "components/MDTypography";
+import ToggleSwitch from './ToggleSwitch';
 
 
-const exampleProject1 = () => {
+const iluminare = () => {
 
 
   const [messages, setMessages] = useState([]);
@@ -76,6 +74,7 @@ const exampleProject1 = () => {
 
   const tempTopic = 'agrobot/sensors/temperature/sensor-1';
   const humTopic = 'agrobot/sensors/temperature/sensor-2';
+  // database
 
 
   const mqttConnect = () => {
@@ -124,35 +123,43 @@ const exampleProject1 = () => {
       <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
+            <MDBox mb={2.5}>
+              <MDTypography variant="subtitle1" fontWeight="bold" mb={1}>
+                RED
+              </MDTypography>
+              <ToggleSwitch />
+            </MDBox>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="primary"
                 icon="thermostat"
-                title="Temperature"
+                title="Light"
                 count={temp}
-                percentage={{
-                  color: "success",
-                  amount: "+1",
-                  label: "difference",
-                }}
               />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
+            <MDBox mb={2.5}>
+              <MDTypography variant="subtitle1" fontWeight="bold" mb={1}>
+                GREEN
+              </MDTypography>
+              <ToggleSwitch />
+            </MDBox>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="waterdropicon"
-                title="Humidity"
+                title="Color"
                 count={hum}
-                percentage={{
-                  color: "error",
-                  amount: "-1",
-                  label: "difference",
-                }}
               />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
+            <MDBox mb={2.5}>
+              <MDTypography variant="subtitle1" fontWeight="bold" mb={1}>
+                BLUE
+              </MDTypography>
+              <ToggleSwitch />
+            </MDBox>
             <MDBox mb={1.5}>
               <MDButton variant="gradient" color="info" fullWidth type="submit" onClick={(e) => getMessages(e)}>
                 Load Data
@@ -176,67 +183,37 @@ const exampleProject1 = () => {
                   onChange={changeHandler}
                 />
               </MDBox>
-
             </MDBox>
-
           </Grid>
 
           <Grid item xs={12} md={6} lg={3}>
+            <MDBox mb={2.5}>
+            </MDBox>
             <MDBox mb={1.5}>
               <MDTypography > MQTT status : {connectStatus}</MDTypography>
             </MDBox>
             <MDBox mb={1.5}>
               <MDTypography > Current Settings : {settings}</MDTypography>
             </MDBox>
-
           </Grid>
         </Grid>
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
-
             <Grid item xs={12} md={12} lg={12}>
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
                   title="Statistics"
-                  description={
-                    <>
-                      (<strong>+25</strong>) hot weather today.
-                    </>
-                  }
-                  date="updated 4 min ago"
                   chart={messages}
                 />
               </MDBox>
             </Grid>
-
           </Grid>
         </MDBox>
-        <MDBox mt={4.5}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={3}>
-              <Temp id={"temp1"} value={temp} title={"temperature"}></Temp>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Battery percentage={temp} />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Dial id="dial2" value={temp} title="Speed Y" />
-
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <AccelDial id="dial3" value={hum} title="Acceleration X" />
-            </Grid>
-          </Grid>
-        </MDBox>
-
-
-
-
       </MDBox>
       <Footer />
     </DashboardLayout>
   );
 };
 
-export default exampleProject1;
+export default iluminare;
