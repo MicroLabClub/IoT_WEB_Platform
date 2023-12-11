@@ -37,7 +37,7 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-
+import TrichoGrammas from "layouts/trichoGramma";
 
 import UserProfile from "layouts/user-profile";
 import Maps from "layouts/maps";
@@ -122,6 +122,14 @@ const routes = [
     icon: <Icon fontSize="small">settings</Icon>,
     route: "/ExampleProject1",
     component: <ExampleProject1 />,
+  },
+  {
+    type: "collapse",
+    name: "TrichoGrammas",
+    key: "TrichoGrammas",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/TrichoGrammas",
+    component: <TrichoGrammas />,
   },
 ];
 
