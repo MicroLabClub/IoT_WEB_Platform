@@ -124,10 +124,6 @@ const iluminare = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={2.5}>
-              <MDTypography variant="subtitle1" fontWeight="bold" mb={1}>
-                RED
-              </MDTypography>
-              <ToggleSwitch />
             </MDBox>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
@@ -140,10 +136,6 @@ const iluminare = () => {
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={2.5}>
-              <MDTypography variant="subtitle1" fontWeight="bold" mb={1}>
-                GREEN
-              </MDTypography>
-              <ToggleSwitch />
             </MDBox>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
@@ -155,10 +147,6 @@ const iluminare = () => {
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={2.5}>
-              <MDTypography variant="subtitle1" fontWeight="bold" mb={1}>
-                BLUE
-              </MDTypography>
-              <ToggleSwitch />
             </MDBox>
             <MDBox mb={1.5}>
               <MDButton variant="gradient" color="info" fullWidth type="submit" onClick={(e) => getMessages(e)}>
