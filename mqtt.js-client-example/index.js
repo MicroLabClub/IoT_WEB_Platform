@@ -38,42 +38,42 @@ client.on('message', mqtt_messsageReceived);
 
 //receive a message from MQTT broker
 function mqtt_messsageReceived(topic, message, packet) {
-  console.log('Received message on topic:', topic); 
+  console.log('Received message on topic:', topic);
   var message_str = message.toString(); //convert byte array to string
   console.log("message to string", message_str);
   let table_name = "messages_mqqt";
   try {
     insert_message(topic, message, table_name);
-  } catch(e){
+  } catch (e) {
     console.log("Error on sql insert message : ", e.message);
   }
-  
+
 };
 
 //insert a row into the db table
 function insert_message(topic, message, table_name) {
-  let jsonMessage = JSON.parse(message); 
+  let jsonMessage = JSON.parse(message);
   let sensor_id = jsonMessage.sensor_id;
-  let date= new Date();
+  let date = new Date();
   let sql = "INSERT INTO ?? (??,??,??,??,??) VALUES (?,?,?,?,?)";
-  let params = [table_name, 'message_id', 'sensor_id', 'topic', 'message','date', null, sensor_id, topic, message, date];
-  sql = mysql.format(sql, params);    
+  let params = [table_name, 'message_id', 'sensor_id', 'topic', 'message', 'date', null, sensor_id, topic, message, date];
+  sql = mysql.format(sql, params);
 
   connection.query(sql, function (error, results) {
-      if (error) throw error;
-      console.log("Message added: " , results.insertId);
-  }); 
-};  
+    if (error) throw error;
+    console.log("Message added: ", results.insertId);
+  });
+};
 
 
-function mqtt_connected(){
+function mqtt_connected() {
   console.log("Connected to MQTT");
 };
 
 function mqtt_reconnect(err) {
   console.log("Reconnect MQTT");
-  if (err) {console.log(err);}
-  client  = mqtt.connect(options);
+  if (err) { console.log(err); }
+  client = mqtt.connect(options);
 };
 
 function mqtt_close() {
@@ -81,27 +81,30 @@ function mqtt_close() {
 };
 
 function mqtt_error(err) {
-  console.log("MQTT Error:",err);
+  console.log("MQTT Error:", err);
 };
 
 function mqtt_subscribe(err, Topic) {
   console.log("Subscribed to " + JSON.stringify(Topic));
-  if (err) {console.log(err);}
+  if (err) { console.log(err); }
 };
 
 
 // subscribe and publish to the same topic
-client.subscribe('agrobot/sensors/#', mqtt_subscribe);
+// client.subscribe('agrobot/sensors/#', mqtt_subscribe);
+client.subscribe('microlab/agro/light/intensity', mqtt_subscribe);
 
-setInterval(function () {
-  let tc = Math.floor((Math.random() * 100) + 1);
-  client.publish('agrobot/sensors/temperature/sensor-1', JSON.stringify({'temp': tc, 'sensor_id':1}));
-}, 6000);
+// uncomment if you want to mock the sensor ( to send data)
+//
+// setInterval(function () {
+//   let tc = Math.floor((Math.random() * 100) + 1);
+//   client.publish('microlab/agro/soil/humidity', JSON.stringify({'humidity': tc, 'sensor_id':1}));
+// }, 6000);
 
-setInterval(function () {
-  let tc = Math.floor((Math.random() * 10) + 1);
-  client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':2}));
-}, 6000);
+// setInterval(function () {
+//   let tc = Math.floor((Math.random() * 10) + 1);
+//   client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':2}));
+// }, 6000);
 
 
 //testing

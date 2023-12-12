@@ -8,31 +8,26 @@ import Grid from "@mui/material/Grid";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
-import MDInput from "components/MDInput";
-
 
 import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import MDButton from "components/MDButton";
 
-import Temp from "./temp";
-
-import mqtt from "mqtt";
-import { options } from "../../config/mqtt.config";
-import { host } from "../../config/mqtt.config";
-import MDTypography from "components/MDTypography";
-import ToggleSwitch from './ToggleSwitch';
-
 
 const iluminare = () => {
+  const [messages, setMessages] = useState({});
+  const [count, setCount] = useState(4);
 
 
-  const [messages, setMessages] = useState([]);
-
-  //  console.log(messages);
+  console.log(messages);
 
   async function getMessages() {
     try {
-      const response = await axios.post('http://localhost:3001/api/messages/getBySensorId', { "sensor_id": 1 });
+      const requestLightIntensity = {
+        "topic": "microlab/agro/light/intensity"
+      };
+      const response =
+        await axios.post('http://localhost:3001/api/messages/getByTopic', requestLightIntensity);
+
       let result = response.data;
       console.log(result.length);
 
@@ -40,10 +35,10 @@ const iluminare = () => {
 
       setMessages({
         labels: shortResult.map(x => x.message_id),
-        datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.message).temp) },
+        datasets: { label: "Light Intensity", data: shortResult.map(x => JSON.parse(x.message).intensity) },
       });
-
-      console.log(messages);
+      const resp = shortResult.map(x => JSON.parse(x.message).intensity);
+      setCount(resp[49] + " lux");
     } catch (error) {
       console.error(error);
     }
@@ -51,71 +46,13 @@ const iluminare = () => {
 
   useEffect(() => {
     getMessages();
+    //automatically update the chart data each 5 seconds
+    const intervalId = setInterval(() => {
+      getMessages();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
-
-  /*   Set Data */
-  const [settings, setSettings] = useState(null);
-
-  const changeHandler = (e) => {
-    setSettings(e.target.value);
-  };
-
-
-
-  /* MQTT */
-  const [client, setClient] = useState(null);
-  const [connectStatus, setConnectStatus] = useState(null);
-
-  const [temp, setTemp] = useState(0);
-  const [hum, setHum] = useState(0);
-
-
-
-
-  const tempTopic = 'agrobot/sensors/temperature/sensor-1';
-  const humTopic = 'agrobot/sensors/temperature/sensor-2';
-  // database
-
-
-  const mqttConnect = () => {
-    setConnectStatus('Connecting');
-    let client = mqtt.connect(host, options);
-    setClient(client);
-  };
-
-  useEffect(() => {
-    mqttConnect();
-  }, []);
-
-  useEffect(() => {
-    if (client) {
-      console.log(client);
-      client.on('connect', () => {
-        setConnectStatus('Connected');
-
-        client.subscribe(tempTopic);
-        client.subscribe(humTopic);
-      });
-      client.on('error', (err) => {
-        console.error('Connection error: ', err);
-        client.end();
-      });
-      client.on('reconnect', () => {
-        setConnectStatus('Reconnecting');
-      });
-      client.on('message', (topic, message) => {
-        setConnectStatus('Message received');
-
-        if (topic === tempTopic) {
-          setTemp(JSON.parse(message.toString()).temp);
-        } else if (topic === humTopic) {
-          setHum(JSON.parse(message.toString()).hum);
-        }
-        console.log(message.toString());
-      });
-    }
-  }, [client]);
-
 
   return (
     <DashboardLayout marginLeft={274}>
@@ -123,31 +60,15 @@ const iluminare = () => {
       <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={2.5}>
-            </MDBox>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                color="primary"
-                icon="thermostat"
-                title="Light"
-                count={temp}
+                icon="lightbulbicon"
+                title="Light Intensity"
+                count={count}
               />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={2.5}>
-            </MDBox>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="waterdropicon"
-                title="Color"
-                count={hum}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={2.5}>
-            </MDBox>
             <MDBox mb={1.5}>
               <MDButton variant="gradient" color="info" fullWidth type="submit" onClick={(e) => getMessages(e)}>
                 Load Data
@@ -159,43 +80,21 @@ const iluminare = () => {
                 Set Data
               </MDButton>
             </MDBox>
-
-            <MDBox mb={1.5}>
-              <MDBox mb={2}>
-                <MDInput
-                  type="text"
-                  label="Settings"
-                  fullWidth
-                  value={settings}
-                  name="settings"
-                  onChange={changeHandler}
-                />
-              </MDBox>
-            </MDBox>
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={2.5}>
-            </MDBox>
-            <MDBox mb={1.5}>
-              <MDTypography > MQTT status : {connectStatus}</MDTypography>
-            </MDBox>
-            <MDBox mb={1.5}>
-              <MDTypography > Current Settings : {settings}</MDTypography>
-            </MDBox>
           </Grid>
         </Grid>
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
+
             <Grid item xs={12} md={12} lg={12}>
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
-                  title="Statistics"
+                  title="Light Intensity and Setpoint"
                   chart={messages}
                 />
               </MDBox>
             </Grid>
+
           </Grid>
         </MDBox>
       </MDBox>
