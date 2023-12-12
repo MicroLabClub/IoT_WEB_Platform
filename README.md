@@ -1,4 +1,4 @@
-# ReactPlatform for Greenhouse Light Control
+# ReactPlatform
 
 
  
