@@ -94,10 +94,12 @@ function mqtt_subscribe(err, Topic) {
 // client.subscribe('agrobot/sensors/#', mqtt_subscribe);
 client.subscribe('microlab/agro/soil/humidity', mqtt_subscribe);
 
-setInterval(function () {
-  let tc = Math.floor((Math.random() * 100) + 1);
-  client.publish('microlab/agro/soil/humidity', JSON.stringify({'humidity': tc, 'sensor_id':1}));
-}, 6000);
+// uncomment if you want to mock the sensor ( to send data)
+//
+// setInterval(function () {
+//   let tc = Math.floor((Math.random() * 100) + 1);
+//   client.publish('microlab/agro/soil/humidity', JSON.stringify({'humidity': tc, 'sensor_id':1}));
+// }, 6000);
 
 // setInterval(function () {
 //   let tc = Math.floor((Math.random() * 10) + 1);
