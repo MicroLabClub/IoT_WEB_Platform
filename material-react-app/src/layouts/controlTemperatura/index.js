@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import MDBox from "components/MDBox";
 import Footer from "examples/Footer";
@@ -15,14 +15,10 @@ import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import MDButton from "components/MDButton";
 
 
-
 import mqtt from "mqtt";
-import { options } from "../../config/mqtt.config";
-import { host } from "../../config/mqtt.config";
+import {host, options} from "../../config/mqtt.config";
 import MDTypography from "components/MDTypography";
-import DefaultLineChart from "../../examples/Charts/LineCharts/DefaultLineChart";
-
-
+import moment from 'moment';
 
 
 const controlTemperatura = () => {
@@ -41,11 +37,17 @@ const controlTemperatura = () => {
       let result = response.data;
       console.log(result.length);
 
-      let shortResult = result.splice(result.length - 50, result.length);
+      let shortResult = result.splice(result.length - 20, result.length);
 
+      const parsedLabels = shortResult.map(x => {
+        const seconds = moment(x.date).get('seconds');
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+      });
       setMessages({
-        labels: shortResult.map(x => x.message_id),
-        datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.message).temp) },
+        labels: parsedLabels,
+        datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.message).temperature) },
       });
 
       const resp = shortResult.map(x=> JSON.parse(x.message).temp);
@@ -128,7 +130,7 @@ const controlTemperatura = () => {
         setConnectStatus('Message received');
 
         if (topic === tempTopic) {
-          setTemp(JSON.parse(message.toString()).temp);
+          setTemp(JSON.parse(message.toString()).temperature);
         }
         console.log(message.toString());
       });
@@ -147,7 +149,7 @@ const controlTemperatura = () => {
                 color="primary"
                 icon="thermostat"
                 title="Temperature"
-                count={count}
+                count={temp}
                 // percentage={{
                 //   color: "success",
                 //   amount: "+1",
