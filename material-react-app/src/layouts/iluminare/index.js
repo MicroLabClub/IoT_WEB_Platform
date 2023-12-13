@@ -34,9 +34,10 @@ const iluminare = () => {
       let shortResult = result.splice(result.length - 50, result.length);
 
       setMessages({
-        labels: shortResult.map(x => x.message_id),
+        labels: shortResult.map(x => new Date(x.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })),
         datasets: { label: "Light Intensity", data: shortResult.map(x => JSON.parse(x.message).intensity) },
       });
+
       const resp = shortResult.map(x => JSON.parse(x.message).intensity);
       setCount(resp[49] + " lux");
     } catch (error) {
