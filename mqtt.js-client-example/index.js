@@ -36,6 +36,18 @@ client.on('error', mqtt_error);
 client.on('close', mqtt_close);
 client.on('message', mqtt_messsageReceived);
 
+let humTime = 6000;
+let tempTime = 5000;
+let batteryTime = 5000;
+let flowerNumberingTime = 5000;
+
+let timeInterval = null;
+let humInterval = null;
+let batteryInterval = null;
+let flowerNumberingInterval = null;
+
+let batteryLevel = 100;
+
 //receive a message from MQTT broker
 function mqtt_messsageReceived(topic, message, packet) {
   console.log('Received message on topic:', topic);
@@ -48,7 +60,44 @@ function mqtt_messsageReceived(topic, message, packet) {
     console.log("Error on sql insert message : ", e.message);
   }
 
-};
+
+  if(topic == "microlab/agro/device/ventilation/settings"){
+    console.log("settings topic");
+    console.log(message_str);
+    //console.log(JSON.parse(message_str).humTime);
+    //console.log(JSON.parse(message_str).tempTime);
+    clearInterval(humInterval);
+    humTime = JSON.parse(message_str).humTime *1000;
+    setHumInterval(humTime);
+
+    clearInterval(timeInterval);
+    tempTime = JSON.parse(message_str).tempTime * 1000;
+    setTempInterval(tempTime);
+
+  } else if (topic === "microlab/automotive/device/drone/battery"){
+    console.log("settings topic");
+    console.log(message_str);
+
+    clearInterval(batteryInterval);
+    let receivedBatteryTime = JSON.parse(message_str).batteryTime * 1000;
+    setBatteryInterval(receivedBatteryTime);
+
+  } else if(topic === "microlab/automotive/device/drone/flowerNumbering"){
+    console.log("settings topic");
+    console.log(message_str);
+
+    clearInterval(flowerNumberingInterval);
+    let receivedFlowerNumberingTime = JSON.parse(message_str).flowerNumberingTime * 1000;
+    setFlowerNumberingInterval(receivedFlowerNumberingTime);
+
+  } else{
+    try {
+      insert_message(topic, message, table_name);
+    } catch(e){
+      console.log("Error on sql insert message : ", e.message);
+    }
+  }  
+}
 
 //insert a row into the db table
 function insert_message(topic, message, table_name) {
@@ -62,13 +111,23 @@ function insert_message(topic, message, table_name) {
   connection.query(sql, function (error, results) {
     if (error) throw error;
     console.log("Message added: ", results.insertId);
-  });
-};
+
+  let device_id = jsonMessage.device_id;
+  let date= new Date();
+  let sql = "INSERT INTO ?? (??,??,??,??,??,??) VALUES (?,?,?,?,?,?)";
+  let params = [table_name, 'message_id', 'sensor_id', 'device_id', 'topic', 'message','date', null, sensor_id, device_id, topic, message, date];
+  sql = mysql.format(sql, params);    
+
+  connection.query(sql, function (error, results) {
+      if (error) throw error;
+      console.log("Message added: " , results.insertId);
+  }); 
+}
 
 
 function mqtt_connected() {
   console.log("Connected to MQTT");
-};
+}
 
 function mqtt_reconnect(err) {
   console.log("Reconnect MQTT");
@@ -78,7 +137,7 @@ function mqtt_reconnect(err) {
 
 function mqtt_close() {
   console.log("Close MQTT");
-};
+}
 
 function mqtt_error(err) {
   console.log("MQTT Error:", err);
@@ -93,6 +152,53 @@ function mqtt_subscribe(err, Topic) {
 // subscribe and publish to the same topic
 // client.subscribe('agrobot/sensors/#', mqtt_subscribe);
 client.subscribe('microlab/agro/light/intensity', mqtt_subscribe);
+// client.subscribe('microlab/agro/#', mqtt_subscribe);
+client.subscribe('microlab/automotive/#', mqtt_subscribe);
+
+function setTempInterval(tempTime){
+  timeInterval = setInterval(function () {
+    let tc = Math.floor((Math.random() * 100) + 1);
+    client.publish('agrobot/sensors/temperature/sensor-1', JSON.stringify({'temp': tc, 'sensor_id':1}));
+  }, tempTime);
+}
+
+function setHumInterval(humTime){
+    humInterval = setInterval(function () {
+      let tc = Math.floor((Math.random() * 10) + 1);
+      client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':2}));
+    }, humTime);
+}
+
+function decreaseBatteryLevel() {
+  batteryInterval = setInterval(function () {
+    if (batteryLevel > 0) {
+      batteryLevel -= 1;
+      client.publish('microlab/automotive/device/drone/battery-1', JSON.stringify({ 'battery': batteryLevel, 'device_id': 2 }));
+    } else {
+      clearInterval(batteryInterval);
+    }
+  }, batteryTime);
+}
+
+function setBatteryInterval(batteryTime) {
+  batteryInterval = setInterval(function () {
+    let tc = Math.floor((Math.random() * 10) + 1);
+    client.publish('microlab/automotive/device/drone/battery-1', JSON.stringify({ 'battery': tc, 'device_id': 2 }));
+  }, batteryTime);
+}
+
+function setFlowerNumberingInterval(flowerNumberingTime) {
+  flowerNumberingInterval = setInterval(function () {
+    let tc = Math.floor((Math.random() * 10) + 1);
+    client.publish('microlab/automotive/device/drone/flowerNumbering-1', JSON.stringify({ 'flowerNumbering': tc, 'device_id': 2 }));
+  }, flowerNumberingTime);
+}
+
+setTempInterval(tempTime);
+setHumInterval(humTime);
+setBatteryInterval(batteryTime);
+decreaseBatteryLevel()
+setFlowerNumberingInterval(flowerNumberingTime);
 
 // uncomment if you want to mock the sensor ( to send data)
 //

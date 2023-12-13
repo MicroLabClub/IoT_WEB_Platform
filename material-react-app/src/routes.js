@@ -47,19 +47,21 @@ import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
 import CreateMap from "layouts/maps/CreateMap";
 import Iluminare from "layouts/iluminare";
+import Drones from "./layouts/drones";
+import ExampleProject1 from "layouts/exampleProject1"
 import Devices from "layouts/devices";
 import Missions from "layouts/missions";
 import Sensors from "layouts/sensors";
 
 const routes = [
-  {
-    type: "examples",
-    name: "User Profile",
-    key: "user-profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/user-profile",
-    component: <UserProfile />,
-  },
+  // {
+  //   type: "examples",
+  //   name: "User Profile",
+  //   key: "user-profile",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/user-profile",
+  //   component: <UserProfile />,
+  // },
   {
     type: "collapse",
     name: "Dashboard",
@@ -123,6 +125,14 @@ const routes = [
     icon: <Icon fontSize="small">settings</Icon>,
     route: "/layouts/iluminare",
     component: <Iluminare />,
+  },
+  {
+    type: "collapse",
+    name: "Drones",
+    key: "Drones",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/Drones",
+    component: <Drones />,
   },
 ];
 
