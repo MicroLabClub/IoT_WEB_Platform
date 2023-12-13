@@ -59,6 +59,8 @@ import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
 import CreateMap from "layouts/maps/CreateMap";
 import ExampleProject1 from "layouts/exampleProject1"
+import SolarPowerIcon from '@mui/icons-material/SolarPower';
+import EnergyPrediction from 'layouts/energy-prediction'
 
 const routes = [
   {
@@ -157,6 +159,14 @@ const routes = [
     route: "/ExampleProject1",
     component: <ExampleProject1 />,
   },
+  {
+    type: "collapse",
+    name: "Energy Prediction",
+    key: "Energy Prediction",
+    icon: <SolarPowerIcon/>,
+    route: "/Energy",
+    component: <EnergyPrediction/>,
+  }
 
   // {
   //   type: "examples",
