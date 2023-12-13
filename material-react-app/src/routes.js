@@ -58,7 +58,7 @@ import ResetPassword from "auth/reset-password";
 import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
 import CreateMap from "layouts/maps/CreateMap";
-import ExampleProject1 from "layouts/exampleProject1"
+import ControlTemperatura from "layouts/controlTemperatura"
 
 const routes = [
   {
@@ -151,11 +151,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "ExampleProject1",
-    key: "ExampleProject1",
+    name: "ControlTemperatura",
+    key: "ControlTemperatura",
     icon: <Icon fontSize="small">settings</Icon>,
-    route: "/ExampleProject1",
-    component: <ExampleProject1 />,
+    route: "/ControlTemperatura",
+    component: <ControlTemperatura />,
   },
 
   // {

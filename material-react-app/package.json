@@ -68,6 +68,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^3.0.3"
   },
+  "parserOptions": { "sourceType":  "module"},
   "homepage": "http://localhost:3000",
   "proxy": "http://localhost:3000"
 }
