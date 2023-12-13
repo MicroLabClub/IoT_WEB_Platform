@@ -6,9 +6,10 @@ import MDInput from "components/MDInput";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Header from "layouts/user-profile/Header";
+import Button from "@mui/material/Button";
 
 import { Box } from "@mui/material";
-import { StyledButton } from "./styles";
+import { useNavigate } from "react-router-dom";
 
 const CreateUser = ({ setState, forceUpdate}) => {
     const [newUser, setNewUser] = useState({
@@ -40,9 +41,13 @@ const CreateUser = ({ setState, forceUpdate}) => {
         } catch (error) {
           console.error(error);
         }
-        setState(false)
-        forceUpdate()
   }
+
+  const navigate = useNavigate()
+
+  const goBackHandler = () => {
+    navigate(-1)
+  };
 
 
   return (
@@ -176,7 +181,6 @@ const CreateUser = ({ setState, forceUpdate}) => {
                   flexDirection="column"
                   alignItems="flex-start"
                   width="100%"
-                  mr={2}
                 >
                   <MDTypography variant="body2" color="text" ml={1} fontWeight="regular">
                     Description
@@ -199,10 +203,13 @@ const CreateUser = ({ setState, forceUpdate}) => {
                 </MDBox>
 
               </MDBox>
-              <MDBox mt={4} display="flex" justifyContent="end">
-                <StyledButton variant="gradient" color="info" type="submit">
-                  Create User
-                </StyledButton>
+              <MDBox mt={4} display="flex" justifyContent="space-between" >
+              <Button onClick={()=> goBackHandler()} variant="contained" style={{color: "white", backgroundColor: "red"}} type="button">
+                Close
+                </Button>
+              <Button onClick={()=> goBackHandler()} variant="contained" style={{color: "white"}} type="submit">
+                Create User
+                </Button>
               </MDBox>
             </MDBox>
           </MDBox>

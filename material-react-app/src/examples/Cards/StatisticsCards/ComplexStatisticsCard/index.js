@@ -18,7 +18,6 @@ import PropTypes from "prop-types";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
@@ -53,7 +52,7 @@ function ComplexStatisticsCard({ color, title, count, percentage, icon }) {
           <MDTypography variant="h4">{count}</MDTypography>
         </MDBox>
       </MDBox>
-      <Divider />
+    
       <MDBox pb={2} px={2}>
         <MDTypography component="p" variant="button" color="text" display="flex">
           <MDTypography

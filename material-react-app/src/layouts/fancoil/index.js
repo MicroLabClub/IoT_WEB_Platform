@@ -10,36 +10,53 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import MDButton from "components/MDButton";
-import { Typography } from "@mui/material";
 
 
+const  fancoil= () => {
+  const [messages, setMessages] = useState({});
+  const [count, setCount] = useState(4);
 
-
-const fancoil = () => {
-  const [messages, setMessages] = useState([])
 
   console.log(messages);
 
-
   async function getMessages() {
     try {
-      const response = await axios.get('http://localhost:3001/api/users/');
-      setMessages(response.data);
-      console.log(response);
+      const requestTemperature = {
+        "topic": "microlab/agro/air/temperature"
+      };
+      const response =
+        await axios.post('http://localhost:3001/api/messages/getByTopic', requestTemperature);
+
+      let result = response.data;
+      console.log(result.length);
+
+      let shortResult = result.splice(result.length - 50, result.length);
+
+      setMessages({
+        labels: shortResult.map(x => new Date(x.date).toLocaleDateString('en-GB', { day: '2-digit', hour: '2-digit', minute: '2-digit'})),
+        datasets: { label: "GreenHouse Temperature", data: shortResult.map(x => JSON.parse(x.message).temperature) },
+      });
+
+      const resp = shortResult.map(x => JSON.parse(x.message).temperature);
+      setCount(resp[49] + "C");
     } catch (error) {
       console.error(error);
     }
   }
-  
 
+  useEffect(() => {
+    getMessages();
+    //automatically update the chart data each 5 seconds
+    const intervalId = setInterval(() => {
+      getMessages();
+    }, 1000);
 
-
-  const { sales } = reportsLineChartData;
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout marginLeft={274}>
       <DashboardNavbar />
       <MDBox py={3}>
         <Grid container spacing={3} justifyContent="center">
@@ -48,86 +65,39 @@ const fancoil = () => {
               <ComplexStatisticsCard
                 color="light"
                 icon="thermostat"
-                title="Temperature GreenHouse"
-                count={
-                  <>
-                  22
-                  <Typography variant="body2" component="span" color="textSecondary" style={{fontWeight: 'inherit'}}>
-                  °C
-                  </Typography>
-                    </>
-                }
-                
+                title="Temperature GreenHouse "
+                count={count}
               />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                 color="light"
-                 icon="thermostat"
-                 title="STATUS FANCoil"
-                 count={
-                   <>
-                   ON/OFF
-                   <Typography variant="body2" component="span" color="textSecondary" style={{fontWeight: 'inherit'}}>
-                   
-                   </Typography>
-                     </>
-                 }
-              />
+              <MDButton variant="gradient" color="light" fullWidth type="submit" onClick={(e) => getMessages(e)}>
+                Load Data
+              </MDButton>
+            </MDBox>
+
+            <MDBox mb={1.5}>
+              <MDButton variant="gradient" color="light" fullWidth type="submit">
+                Set Data
+              </MDButton>
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={1}>
-               <MDBox mb={1.5}>
-                  <MDButton
-                      variant="gradient"
-                      color="light"
-                      fullWidth
-                      type="submit"
-                            onClick={(e) => getMessages(e)}
-                      style={{ borderRadius: '12px' }} 
-                   >
-                  <strong>ON</strong>
-                  </MDButton>
-                </MDBox>
-
-                <MDBox mb={1.5}>
-                  <MDButton
-                      variant="gradient"
-                      color="light"
-                      fullWidth
-                      type="submit"
-                      style={{ borderRadius: '12px' }} // Set border radius for a square button
-                    >
-                 <strong>OFF</strong>
-                   </MDButton>
-                  </MDBox>
-          </Grid>
         </Grid>
-        <MDBox mt={10}>
+        <MDBox mt={4.5}>
           <Grid container spacing={3}>
-
             <Grid item xs={12} md={12} lg={12}>
-              <MDBox mb={10}>
+              <MDBox mb={3}>
                 <ReportsLineChart
                   color="secondary"
-                  title="Statistics per Day"
-                  description={
-                    <>
-                      Today Temperature in GreenHouse is Perfect!
-                    </>
-                  }
-                  date="updated 20 min ago"
-                  chart={sales}
+                  title="Temperature in GreenHouse"
+                  chart={messages}
                 />
               </MDBox>
-
             </Grid>
 
           </Grid>
         </MDBox>
-      
       </MDBox>
       <Footer />
     </DashboardLayout>
