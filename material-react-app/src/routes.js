@@ -54,7 +54,10 @@ import Sensors from "layouts/sensors";
 import Iluminare from "layouts/iluminare";
 import ControlTemperatura from "layouts/controlTemperatura";
 import SolarPowerIcon from '@mui/icons-material/SolarPower';
-import EnergyPrediction from 'layouts/energy-prediction'
+import EnergyPrediction from 'layouts/energy-prediction';
+
+import FANCoil from "layouts/fancoil";
+import WindPowerIcon from '@mui/icons-material/WindPower';
 
 
 const routes = [
@@ -161,6 +164,14 @@ const routes = [
     icon: <SolarPowerIcon/>,
     route: "/Energy",
     component: <EnergyPrediction/>,
+  },
+  {
+    type: "collapse",
+    name: "FANCoil",
+    key: "FANCoil",
+    icon: <WindPowerIcon/>,
+    route: "/FANCoil",
+    component: <FANCoil />,
   },
 ];
 
