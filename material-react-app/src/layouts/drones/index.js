@@ -164,15 +164,14 @@ const Drones = () => {
                             if (i < coordinates.length) {
                                 const redLineCoords = coordinates.slice(0, i + 1).map(coord => [coord.lat, coord.lng]);
                                 setRedLineCoordinates([
-                                    <Polyline key="line-red" positions={redLineCoords} color="red" />,
+                                    <Polyline key="line-red" positions={redLineCoords} color="red"/>,
                                 ]);
 
-                                // Verificăm dacă linia roșie a ajuns la marker
                                 if (i > 0 && i <= coordinates.length - 1) {
-                                    setCurrentMarkerIndex(i - 1); // Indexul marker-ului asociat liniei roșii
-                                    setShowImages(true); // Afișăm caruselul de imagini
+                                    setCurrentMarkerIndex(i - 1);
+                                    setShowImages(true);
                                 } else {
-                                    setShowImages(false); // Dacă linia nu a ajuns la marker, nu afișăm caruselul
+                                    setShowImages(false);
                                 }
 
                                 i++;
@@ -394,25 +393,25 @@ const Drones = () => {
                     width="100%"
                     mr={2}
                 >
-                    <MDBox mb={2} width="100%">
-                        {mapCoordinates.center !== null && showImages && (
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} md={12} lg={12}>
-                                    <MDBox mb={3} height="350px" width="100%">
-                                        <Carousel showThumbs={false}>
-                                            {images.map((image, index) =>
-                                                    index === currentMarkerIndex && (
-                                                        <div key={index}>
-                                                            <img src={image} alt={`Image ${index + 1}`} />
-                                                        </div>
-                                                    )
-                                            )}
-                                        </Carousel>
-                                    </MDBox>
+                        <MDBox mb={2} width="100%">
+                            {mapCoordinates.center !== null && showImages && (
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} md={12} lg={12}>
+                                        <MDBox mb={3} height="350px" width="100%">
+                                            <Carousel showThumbs={false}>
+                                                {images.map((image, index) =>
+                                                        index === currentMarkerIndex && (
+                                                            <div key={index}>
+                                                                <img src={image} alt={`Image ${index + 1}`} />
+                                                            </div>
+                                                        )
+                                                )}
+                                            </Carousel>
+                                        </MDBox>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        )}
-                    </MDBox>
+                            )}
+                        </MDBox>
                 </MDBox>
             </MDBox>
             <MDBox
