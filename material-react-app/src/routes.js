@@ -60,6 +60,7 @@ import FANCoil from "layouts/fancoil";
 import WindPowerIcon from '@mui/icons-material/WindPower';
 
 import TrichoGrammas from "layouts/trichoGramma";
+import ProjectSoilHumidity from "layouts/projectSoilHumidity";
 
 
 const routes = [
@@ -183,6 +184,15 @@ const routes = [
     route: "/TrichoGrammas",
     component: <TrichoGrammas />,
   },
+  {
+    type: "collapse",
+    name: "ProjectSoilHumidity",
+    key: "ProjectSoilHumidity",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/ProjectSoilHumidity",
+    component: <ProjectSoilHumidity />,
+  }
+  
 ];
 
 export default routes;
