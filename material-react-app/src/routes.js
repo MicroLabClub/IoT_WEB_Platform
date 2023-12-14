@@ -39,7 +39,7 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 
 
-import UserProfile from "layouts/user-profile";
+// import UserProfile from "layouts/user-profile";
 import Maps from "layouts/maps";
 
 
@@ -50,7 +50,7 @@ import ExampleProject1 from "layouts/exampleProject1"
 import Devices from "layouts/devices";
 import Missions from "layouts/missions";
 import Sensors from "layouts/sensors";
-import CreateMap from "layouts/maps/CreateMap";
+// import CreateMap from "layouts/maps/CreateMap";
 import Iluminare from "layouts/iluminare";
 import ControlTemperatura from "layouts/controlTemperatura";
 
