@@ -39,6 +39,13 @@ client.on('message', mqtt_messsageReceived);
 let humTime = 6000;
 let tempTime = 5000;
 
+let chargingPowerTime = 5000;
+let chargingPowerTimeInterval = null;
+
+let pVoltageTime = 5000;
+let pVoltageInterval = null;
+
+
 let timeInterval = null;
 let humInterval = null;
 
@@ -53,17 +60,28 @@ function mqtt_messsageReceived(topic, message, packet) {
   if(topic == "microlab/agro/device/ventilation/settings"){
     console.log("settings topic");
     console.log(message_str);
-    //console.log(JSON.parse(message_str).humTime);
-    //console.log(JSON.parse(message_str).tempTime);
     clearInterval(humInterval);
-    humTime = JSON.parse(message_str).humTime *1000;
+    humTime = JSON.parse(message_str).humTime * 30000;
     setHumInterval(humTime);
 
     clearInterval(timeInterval);
-    tempTime = JSON.parse(message_str).tempTime * 1000;
+    tempTime = JSON.parse(message_str).tempTime * 30000;
     setTempInterval(tempTime);
 
-  } else {
+  } else if (topic == "microlab/agro/device/invertor/chargingPower"){
+    console.log("settings topic");
+    clearInterval(chargingPowerTimeInterval);
+    chargingPowerTime = JSON.parse(message_str).chargingPowerTime *3000;
+    console.log(chargingPowerTime);
+    setChargingPowerInterval(chargingPowerTime);
+  } else if (topic == "microlab/agro/device/invertor/pVoltage"){
+    console.log("settings topic");
+    clearInterval(pVoltageInterval);
+    pVoltageTime = JSON.parse(message_str).pVoltageTime *3000;
+    console.log(pVoltageTime);
+    setPVoltageInterval(pVoltageTime);
+  }
+  {
     try {
       insert_message(topic, message, table_name);
     } catch(e){
@@ -113,7 +131,7 @@ function mqtt_subscribe(err, Topic) {
 
 
 // subscribe and publish to the same topic
-client.subscribe('agrobot/sensors/#', mqtt_subscribe);
+//client.subscribe('agrobot/sensors/#', mqtt_subscribe);
 client.subscribe('microlab/agro/#', mqtt_subscribe);
 
 function setTempInterval(tempTime){
@@ -125,10 +143,26 @@ function setTempInterval(tempTime){
 function setHumInterval(humTime){
     humInterval = setInterval(function () {
       let tc = Math.floor((Math.random() * 10) + 1);
-      client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':2}));
+      client.publish('agrobot/sensors/temperature/sensor-2', JSON.stringify({'hum': tc, 'sensor_id':1}));
     }, humTime);
 }
 
+function setChargingPowerInterval(chargingPowerTime){
+  chargingPowerTimeInterval = setInterval(function () {
+    let tc = Math.floor((Math.random() * 10) + 1);
+    client.publish('microlab/agro/device/invertor/chargingPower-1', JSON.stringify({'chargingPower': tc, 'sensor_id':1}));
+  }, chargingPowerTime);
+}
+
+function setPVoltageInterval(chargingPowerTime){
+  pVoltageInterval = setInterval(function () {
+    let tc = Math.floor((Math.random() * 10) + 1);
+    client.publish('microlab/agro/device/invertor/pVoltage-1', JSON.stringify({'pVoltage': tc, 'sensor_id':1}));
+  }, pVoltageTime);
+}
+
+setChargingPowerInterval(chargingPowerTime);
+setPVoltageInterval(pVoltageTime)
 setTempInterval(tempTime);
 setHumInterval(humTime);
 

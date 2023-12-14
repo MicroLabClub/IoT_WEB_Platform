@@ -17,8 +17,14 @@ import { host } from "../../config/mqtt.config";
 
 import { options } from "../../config/mqtt.config";
 
+import SolarPowerIcon from '@mui/icons-material/SolarPower';
+import ElectricMeterIcon from '@mui/icons-material/ElectricMeter';
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
+
 const energyPrediction = () => {
-  const [messages, setMessages] = useState([]);
+  const [message, setMessagesPower] = useState([]);
+  const [messagePVoltage, setMessagesPVoltage] = useState([]);
+  
   //  console.log(messages);
   async function getMessages() {
     try {
@@ -27,13 +33,29 @@ const energyPrediction = () => {
       console.log(result.length);
 
       let shortResult = result.splice(result.length - 20, result.length);
+      console.log(shortResult);
 
-      setMessages({
-        labels: shortResult.map(x => x.message_id),
-        datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.message).temp) },
+      setMessagesPower({
+        labels: shortResult.map(x => {
+          const dateObject = new Date(x.date);
+          const day = dateObject.getDate().toString().padStart(2, '0'); // Get day and pad with zero if needed
+          const month = new Intl.DateTimeFormat('en', { month: 'short' }).format(dateObject); // Get abbreviated month name
+          return `${day} ${month}`;
+        }),
+        datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.message).chargingPower) },
       });
 
-      console.log(messages);
+      setMessagesPVoltage({
+        labels: shortResult.map(x => {
+          const dateObject = new Date(x.date);
+          const day = dateObject.getDate().toString().padStart(2, '0'); // Get day and pad with zero if needed
+          const month = new Intl.DateTimeFormat('en', { month: 'short' }).format(dateObject); // Get abbreviated month name
+          return `${day} ${month}`;
+        }),
+        datasets: { label: "Temperature", data: shortResult.map(x => JSON.parse(x.messagePVoltage).pVoltage) },
+      });
+
+      console.log(message);
     } catch (error) {
       console.error(error);
     }
@@ -56,9 +78,14 @@ const energyPrediction = () => {
 
   const [temp, setTemp] = useState(0);
   const [hum, setHum] = useState(0);
+  const [chargingPower, setChargingPower] = useState(0);
+  const [pVoltage, setPVoltage] = useState(0);
+
 
   const tempTopic = 'agrobot/sensors/temperature/sensor-1';
   const humTopic = 'agrobot/sensors/temperature/sensor-2';
+  const chargingPowerTopic = 'microlab/agro/device/invertor/chargingPower-1';
+  const pVoltageTopic = 'microlab/agro/device/invertor/pVoltage-1';
 
 
   const mqttConnect = () => {
@@ -79,6 +106,8 @@ const energyPrediction = () => {
 
         client.subscribe(tempTopic);
         client.subscribe(humTopic);
+        client.subscribe(chargingPowerTopic);
+        client.subscribe(pVoltageTopic);
       });
       client.on('error', (err) => {
         console.error('Connection error: ', err);
@@ -94,8 +123,12 @@ const energyPrediction = () => {
           setTemp(JSON.parse(message.toString()).temp);
         } else if (topic === humTopic) {
           setHum(JSON.parse(message.toString()).hum);
-        }
-        console.log(message.toString());
+        } else if(topic === chargingPowerTopic) {
+          setChargingPower(JSON.parse(message.toString()).chargingPower);
+        } else if(topic === pVoltageTopic) {
+          setPVoltage(JSON.parse(message.toString()).pVoltage);
+        console.log(message.toString())
+      }
       });
     }
   }, [client]);
@@ -110,14 +143,9 @@ const energyPrediction = () => {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="bolt"
+                icon={<BatteryChargingFullIcon/>}
                 title="PV Charging Power"
-                count={temp}
-                percentage={{
-                  color: "success",
-                  amount: "+1",
-                  label: "difference",
-                }}
+                count={`${chargingPower}W`}
               />
             </MDBox>
           </Grid>
@@ -126,12 +154,7 @@ const energyPrediction = () => {
               <ComplexStatisticsCard
                 icon="bolt"
                 title="PV Input Voltage"
-                count={hum}
-                percentage={{
-                  color: "error",
-                  amount: "-1",
-                  label: "difference",
-                }}
+                count={`${pVoltage}V`}
               />
             </MDBox>
           </Grid>
@@ -139,14 +162,9 @@ const energyPrediction = () => {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
-                icon="bolt"
+                icon={<ElectricMeterIcon/>}
                 title="AC Input Voltage"
-                count={hum}
-                percentage={{
-                  color: "error",
-                  amount: "-1",
-                  label: "difference",
-                }}
+                count={`${chargingPower}V`}
               />
             </MDBox>
           </Grid>
@@ -183,7 +201,7 @@ const energyPrediction = () => {
                   color="success"
                   title="PV Charging Power"
                   date="updated 4 min ago"
-                  chart={messages}
+                  chart={message}
                 />
               </MDBox>
             </Grid>
@@ -193,7 +211,7 @@ const energyPrediction = () => {
                   color="info"
                   title="PV Input Voltage"
                   date="updated 4 min ago"
-                  chart={messages}
+                  chart={message}
                 />
               </MDBox>
             </Grid>
@@ -203,7 +221,7 @@ const energyPrediction = () => {
                   color="dark"
                   title="AC Input Voltage"
                   date="updated 4 min ago"
-                  chart={messages}
+                  chart={message}
                 />
               </MDBox>
             </Grid>
