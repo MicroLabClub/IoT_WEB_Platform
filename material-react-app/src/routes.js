@@ -128,14 +128,14 @@ const routes = [
     type: "title",
     title: "Projects",
   },
-  {
-    type: "collapse",
-    name: "ExampleProject1",
-    key: "ExampleProject1",
-    icon: <Icon fontSize="small">settings</Icon>,
-    route: "/ExampleProject1",
-    component: <ExampleProject1 />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "ExampleProject1",
+  //   key: "ExampleProject1",
+  //   icon: <Icon fontSize="small">settings</Icon>,
+  //   route: "/ExampleProject1",
+  //   component: <ExampleProject1 />,
+  // },
   {
     type: "collapse",
     name: "Drones",
