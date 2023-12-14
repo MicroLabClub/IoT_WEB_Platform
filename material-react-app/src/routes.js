@@ -53,6 +53,8 @@ import Sensors from "layouts/sensors";
 // import CreateMap from "layouts/maps/CreateMap";
 import Iluminare from "layouts/iluminare";
 import ControlTemperatura from "layouts/controlTemperatura";
+import SolarPowerIcon from '@mui/icons-material/SolarPower';
+import EnergyPrediction from 'layouts/energy-prediction'
 
 
 const routes = [
@@ -151,6 +153,14 @@ const routes = [
     icon: <Icon fontSize="small">settings</Icon>,
     route: "/ControlTemperatura",
     component: <ControlTemperatura />,
+  },
+  {
+    type: "collapse",
+    name: "Energy Prediction",
+    key: "Energy Prediction",
+    icon: <SolarPowerIcon/>,
+    route: "/Energy",
+    component: <EnergyPrediction/>,
   },
 ];
 
