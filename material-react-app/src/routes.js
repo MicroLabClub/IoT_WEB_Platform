@@ -117,7 +117,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "ExampleProject1",
+    name: "Drones",
     key: "ExampleProject1",
     icon: <Icon fontSize="small">settings</Icon>,
     route: "/ExampleProject1",
