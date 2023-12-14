@@ -26,6 +26,7 @@ const UpdateDevice = () => {
   async function getDevice() {
     try {
       const response = await axios.get(`http://localhost:3001/api/devices/${id.id}`);
+      console.log(response.data);
       setNewDevice(response.data)
     } catch (error) {
       console.error(error);
@@ -34,7 +35,7 @@ const UpdateDevice = () => {
 
   const changeHandler = (e) => {
     setNewDevice({
-      ...setNewDevice,
+      ...device,
       [e.target.name]: e.target.value,
     });
   };
@@ -104,7 +105,6 @@ const UpdateDevice = () => {
                     placeholder="Description"
                     value={device.description}
                     onChange={changeHandler}
-                    error={errors.descriptionError}
                   />
                 </MDBox>
               </MDBox>
@@ -183,7 +183,7 @@ const UpdateDevice = () => {
                   Close
                 </Button>
                 <Button onClick={() => goBackHandler()} variant="contained" style={{ color: "white" }} type="submit">
-                  Update User
+                  Update Device
                 </Button>
               </MDBox>
             </MDBox>

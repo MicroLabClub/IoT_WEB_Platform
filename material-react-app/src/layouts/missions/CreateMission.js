@@ -25,24 +25,27 @@ const CreateMission = () => {
     usersId: []
   })
 
+  console.log(options);
   async function getOptions() {
     try {
       const responseDevices = await axios.get(`http://localhost:3001/api/devices/`);
       setOptions((prevOptions) => ({
         ...prevOptions,
-        devicesId: responseDevices.data.map((item) => ({ label: String(item.device_id) })),
+        devicesId: responseDevices.data.map((item) => ({ label: String(item.device_id) + " - " + item.name})),
       }));
 
       const responseMaps = await axios.get(`http://localhost:3001/api/maps/`);
       setOptions((prevOptions) => ({
         ...prevOptions,
-        mapsId: responseMaps.data.map((item) => ({ label: String(item.map_id) })),
+        mapsId: responseMaps.data.map((item) => ({ label: String(item.map_id) + " - " + item.name  })),
       }));
 
       const responseUsers = await axios.get(`http://localhost:3001/api/users/`);
+      console.log(responseUsers);
+
       setOptions((prevOptions) => ({
         ...prevOptions,
-        usersId: responseUsers.data.map((item) => ({ label: String(item.user_id) })),
+        usersId: responseUsers.data.map((item) => ({ label: String(item.user_id) + " - " + item.name})),
       }));
     } catch (error) {
       console.error(error);

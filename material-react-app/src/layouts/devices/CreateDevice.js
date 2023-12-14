@@ -37,6 +37,7 @@ const CreateDevice = () => {
   const submitHandler = (e) => {
     e.preventDefault()
     try {
+      console.log(newDevice);
       axios.post('http://localhost:3001/api/devices/', { ...newDevice });
     } catch (error) {
       console.error(error);
