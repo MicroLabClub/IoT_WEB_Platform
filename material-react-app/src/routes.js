@@ -59,6 +59,8 @@ import EnergyPrediction from 'layouts/energy-prediction';
 import FANCoil from "layouts/fancoil";
 import WindPowerIcon from '@mui/icons-material/WindPower';
 
+import TrichoGrammas from "layouts/trichoGramma";
+
 
 const routes = [
   // {
@@ -172,6 +174,14 @@ const routes = [
     icon: <WindPowerIcon/>,
     route: "/FANCoil",
     component: <FANCoil />,
+  },
+  {
+    type: "collapse",
+    name: "TrichoGrammas",
+    key: "TrichoGrammas",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/TrichoGrammas",
+    component: <TrichoGrammas />,
   },
 ];
 
