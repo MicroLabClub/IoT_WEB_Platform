@@ -11,6 +11,7 @@ import ReportsLineChart from "../../examples/Charts/LineCharts/ReportsLineChart"
 import reportsLineChartData from "../dashboard/data/reportsLineChartData";
 import React, { useState, useEffect } from "react";
 import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
 import Box from "@mui/material/Box";
@@ -174,7 +175,7 @@ const TrichoGrammas = () => {
                       onClick={(event) =>
                         handleDeviceListItemClick(event, device.index)
                       }
-                    >
+                  >
                       <ListItemText primary={device.name} />
                     </ListItemButton>
                   ))}
@@ -201,7 +202,7 @@ const TrichoGrammas = () => {
                       <ListItemButton
                         selected={selectedKey && selectedKey.key === el.key}
                         onClick={(event) => handleSelectedKeyChange(event, el)}
-                      >
+                    >
                         <ListItemText primary={el.key} />
                       </ListItemButton>
                     )
@@ -248,7 +249,7 @@ const TrichoGrammas = () => {
                             onClick={(event) =>
                               handleImageListItemClick(event, image.index)
                             }
-                          >
+              >
                             <ListItemText primary={image.alt} />
                           </ListItemButton>
                         ))

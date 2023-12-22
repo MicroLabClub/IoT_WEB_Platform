@@ -39,26 +39,40 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import TrichoGrammas from "layouts/trichoGramma";
 
-import UserProfile from "layouts/user-profile";
+
+// import UserProfile from "layouts/user-profile";
 import Maps from "layouts/maps";
 
 
 import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
+import Drones from "./layouts/drones";
 import ExampleProject1 from "layouts/exampleProject1"
 import Devices from "layouts/devices";
 import Missions from "layouts/missions";
 import Sensors from "layouts/sensors";
+// import CreateMap from "layouts/maps/CreateMap";
+import Iluminare from "layouts/iluminare";
+import ControlTemperatura from "layouts/controlTemperatura";
+import SolarPowerIcon from '@mui/icons-material/SolarPower';
+import EnergyPrediction from 'layouts/energy-prediction';
+
+import FANCoil from "layouts/fancoil";
+import WindPowerIcon from '@mui/icons-material/WindPower';
+
+import TrichoGrammas from "layouts/trichoGramma";
+import ProjectSoilHumidity from "layouts/projectSoilHumidity";
+
 
 const routes = [
-  {
-    type: "examples",
-    name: "User Profile",
-    key: "user-profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/user-profile",
-    component: <UserProfile />,
-  },
+  // {
+  //   type: "examples",
+  //   name: "User Profile",
+  //   key: "user-profile",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/user-profile",
+  //   component: <UserProfile />,
+  // },
   {
     type: "collapse",
     name: "Dashboard",
@@ -115,13 +129,69 @@ const routes = [
     type: "title",
     title: "Projects",
   },
+  // {
+  //   type: "collapse",
+  //   name: "ExampleProject1",
+  //   key: "ExampleProject1",
+  //   icon: <Icon fontSize="small">settings</Icon>,
+  //   route: "/ExampleProject1",
+  //   component: <ExampleProject1 />,
+  // },
   {
     type: "collapse",
-    name: "ExampleProject1",
-    key: "ExampleProject1",
+    name: "Drones",
+    key: "Drones",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/Drones",
+    component: <Drones />,
+  },
+  {
+    type: "collapse",
+    name: "Iluminare",
+    key: "Iluminare",
     icon: <Icon fontSize="small">settings</Icon>,
-    route: "/ExampleProject1",
-    component: <ExampleProject1 />,
+    route: "/layouts/iluminare",
+    component: <Iluminare />,
+  },
+  {
+    type: "collapse",
+    name: "ControlTemperatura",
+    key: "ControlTemperatura",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/ControlTemperatura",
+    component: <ControlTemperatura />,
+  },
+  {
+    type: "collapse",
+    name: "Energy Prediction",
+    key: "Energy Prediction",
+    icon: <SolarPowerIcon/>,
+    route: "/Energy",
+    component: <EnergyPrediction/>,
+  },
+  {
+    type: "collapse",
+    name: "FANCoil",
+    key: "FANCoil",
+    icon: <WindPowerIcon/>,
+    route: "/FANCoil",
+    component: <FANCoil />,
+  },
+  {
+    type: "collapse",
+    name: "TrichoGrammas",
+    key: "TrichoGrammas",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/TrichoGrammas",
+    component: <TrichoGrammas />,
+  },
+  {
+    type: "collapse",
+    name: "ProjectSoilHumidity",
+    key: "ProjectSoilHumidity",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/ProjectSoilHumidity",
+    component: <ProjectSoilHumidity />,
   },
   {
     type: "collapse",
