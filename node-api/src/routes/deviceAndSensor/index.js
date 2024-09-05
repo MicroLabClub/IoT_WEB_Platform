@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import deviceSensor from "../../controllers/deviceAndSensor.controller";
+import deviceSensor from "../../controllers/deviceAndSensor.controller.js";
 
 router.post("/api/deviceSensor", deviceSensor.create);
 router.get("/api/deviceSensor/:id", deviceSensor.findOne);

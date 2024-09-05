@@ -1,4 +1,4 @@
-import deviceSensor from "../models/deviceAndSensor.model";
+import deviceSensor from "../models/deviceAndSensor.model.js";
 
 const deviceSensorController = function() {
 
