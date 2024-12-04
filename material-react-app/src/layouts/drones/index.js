@@ -48,6 +48,8 @@ const Drones = () => {
     const [redLineCoordinates, setRedLineCoordinates] = useState([]);
     const [totalFlowers, setTotalFlowers] = useState(0);
     const [markerLocations, setMarkerLocations] = useState([]);
+    const [showImages, setShowImages] = useState(false);
+    const [currentMarkerIndex, setCurrentMarkerIndex] = useState(0);
 
     async function getOptionsMission() {
         try {
@@ -164,6 +166,14 @@ const Drones = () => {
                                 setRedLineCoordinates([
                                     <Polyline key="line-red" positions={redLineCoords} color="red"/>,
                                 ]);
+
+                                if (i > 0 && i <= coordinates.length - 1) {
+                                    setCurrentMarkerIndex(i - 1);
+                                    setShowImages(true);
+                                } else {
+                                    setShowImages(false);
+                                }
+
                                 i++;
                             } else {
                                 clearInterval(interval);
@@ -273,12 +283,18 @@ const Drones = () => {
                     const payload = JSON.stringify({ missionId, coordinates });
                     client.publish('microlab/automotive/device/drone/startMission-1', payload);
                     console.log('Coordinates sent:', payload);
+
+                    // Setăm starea pentru afișarea imaginilor în carusel după 5 secunde
+                    setTimeout(() => {
+                        setShowImages(true);
+                    }, 5000);
                 }
             }
         } catch (error) {
             console.error('Error while starting mission:', error);
         }
     };
+
 
     return (
         <DashboardLayout marginLeft={274}>
@@ -357,7 +373,7 @@ const Drones = () => {
                             <MapContainer
                                 center={mapCoordinates.center}
                                 zoom={mapCoordinates.zoom}
-                                style={{height: "390px", marginBottom: "20px", width: "100%"}}
+                                style={{height: "350px", marginBottom: "20px", width: "100%"}}
                             >
                                 <TileLayer
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -377,22 +393,25 @@ const Drones = () => {
                     width="100%"
                     mr={2}
                 >
-                    <MDBox mb={2} width="100%">
-                        {mapCoordinates.center !== null && (
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} md={12} lg={12}>
-                                    <MDBox mb={3} height="350px" width="100%">
-                                        <Carousel showThumbs={false}>
-                                            {images.map((image, index) => (
-                                                <div key={index}>
-                                                    <img src={image} alt={`Image ${index + 1}`}/>
-                                                </div>
-                                            ))}
-                                        </Carousel>
-                                    </MDBox>
+                        <MDBox mb={2} width="100%">
+                            {mapCoordinates.center !== null && showImages && (
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} md={12} lg={12}>
+                                        <MDBox mb={3} height="350px" width="100%">
+                                            <Carousel showThumbs={false}>
+                                                {images.map((image, index) =>
+                                                        index === currentMarkerIndex && (
+                                                            <div key={index}>
+                                                                <img src={image} alt={`Image ${index + 1}`} />
+                                                            </div>
+                                                        )
+                                                )}
+                                            </Carousel>
+                                        </MDBox>
+                                    </Grid>
                                 </Grid>
-                            </Grid>)}
-                    </MDBox>
+                            )}
+                        </MDBox>
                 </MDBox>
             </MDBox>
             <MDBox
